@@ -1,0 +1,237 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{subcaption}
+%opening
+\title{Homework 1}
+\author{Ian Hunt-Isaak}
+\date{}
+\begin{document}
+
+\maketitle
+
+\section{}
+The continuous Advection-Diffusion Equation is:
+\begin{equation}
+\partial_t \varphi = -U \partial_x \varphi + D \partial_{xx}\varphi.
+\label{eq:AD_cont}
+\end{equation}
+In order to numerically simulate this often physically relevant equation one method is known as the forward Euler method. In this method, space is discretized into a lattice of points with spacing $d$ between them. Likewise, time is discretized with the smallest possible time step being $h$. Using centered differences to replace the full derivatives we can go from a continuous equation to a discrete one:
+\begin{equation}
+\frac{\varphi^{n+1}_j-\varphi^n_j}{h} = -U \frac{\varphi^n_{j+1}-\varphi^n_{j-1}}{2d} + D \frac{\varphi^n_{j+1}-2\varphi^n_{j}+\varphi^n_{j-1}}{d^2},
+\label{eq:discrete_AD1}
+\end{equation}
+in this equation the superscript represents the time coordinate of $\varphi$ and the subscript, the position on the simulation lattice. Simplifying our notation with $\varphi^n \to \varphi$ and $\varphi^{n+1} \to \hat{\varphi}$, as well as introducing $\alpha = \frac{Uh}{d}$, and $\delta=\frac{Dh}{d^2}$  we can reduce Eq. \ref{eq:discrete_AD1} to:
+
+\begin{equation}
+	\hat{\varphi_j} = (\delta+\frac{1}{2}\alpha)\varphi_{j+1} +(1-2\delta)\varphi_{j}+(\delta-\frac{1}{2}\alpha)\varphi_{j-1}. 
+	\label{eq:discrete_AD2}
+\end{equation}
+Giving us a transfer matrix described by $T_{jk} = \{\delta-\frac{\alpha}{2},1-2\delta,\delta+\frac{\alpha}{2}\}$, where the solution could be propagated forward in time by repeatedly multiplying the matrix T with the vector of point values $\vec{\varphi}$. 
+This is a result that would could have immediately arrived at if we considered the following relation of spatial derivatives to the transfer matrix.
+\begin{equation}
+\frac{d}{dx} \Leftrightarrow \frac{1}{2d}\{-1,0,1\},
+\label{eq:dx}
+\end{equation}
+\begin{equation}
+\frac{d^2}{dx^2} \Leftrightarrow \frac{1}{d^2}\{1,-2,1\}
+\label{eq:dx^2}
+\end{equation}
+
+
+\subsection{Dispersion Relation}
+If we consider $\omega$ to be composed of a real $\omega_r$ and imaginary part $\gamma$ then we can check ourselves at this point by finding values for the Omega in the limit that our simulation intervals, time step and spatial grid, approach the continuum solution. 
+In order to do this we insert a plane wave $\varphi(x,t) =e^{i(kx-\omega t)}$ as a solution to \ref{eq:discrete_AD2} giving us:
+
+\begin{equation}
+e^{-i\omega h} = (\delta-\frac{1}{2}\alpha)e^{-ikd} + (1-2\delta) +(\delta+\frac{1}{2}\alpha)e^{ikd}.
+\end{equation}
+
+Taking the limits $\omega h \to 0$ and $kd \to 0$ we can Taylor expand the exponential terms, use $\omega = \omega_r + i\gamma$, and group the imaginary and real parts of the equation resulting in the pair of equations:
+\begin{gather}
+\nonumber
+e^{\gamma h}\cos(\omega_r h) = 1 + 2\delta \left[\cos(kd)-1\right] \\
+\approx > 1+\gamma h +\mathcal{O}(\gamma^2h^2) =  1 + 2\delta \left[\frac{-k^2d^2}{2}\right] +\mathcal{O}(k^4d^4),
+\label{eq:disp_1}
+\end{gather}
+and
+\begin{gather}
+\nonumber
+e^{\gamma h}\sin(\omega_r h) =  \alpha \sin(kd) \\
+\approx>  (1+\gamma h)\omega_r h +\mathcal{O}(\gamma^2h^2) = \alpha kd +\mathcal{O}(k^3d^3).
+\label{eq:disp_2}
+\end{gather}
+
+With Eqs. \ref{eq:disp_1}, and \ref{eq:disp_2} we can find,
+\begin{equation}
+	\omega_r = \frac{1}{h}\frac{\alpha k d}{1-\delta \frac{k^2d^2}{2}} = \frac{Uk}{1-\frac{Dhk^2}{2}} \approx Uk.
+\end{equation}
+
+Substituting $\omega_r = \frac{-Uk}{1-\frac{Dhk^2}{2}} $ into Eq. \ref{eq:disp_1} we find that
+\begin{equation}
+\gamma = \frac{-Dk^2}{2}.
+\end{equation}
+
+If we derived these values starting from the continuous AD equation \ref{eq:AD_cont} we would have found $\omega_r = Uk$ and $\gamma =  \frac{-Dk^2}{2},$ so we can be confident in the numerical accuracy of our discrete equation so long as we keep kd small. This means that if we hope to study short range phenomena (high k) we need to be careful to keep the simulation point spacing small enough that $kd$ stays small enough for the above Taylor expansions and other approximations to remain valid. 
+
+\subsection{Stability}
+Considering again Eqs. \ref{eq:disp_1}, \ref{eq:disp_2} before Taylor expansion, we can square and add them to arrive at the equation:
+
+\begin{equation}
+e^{2\gamma h} = (1+2\delta(\cos(kd)-1))^2 + \alpha^2\sin(kd)^2.
+\end{equation}
+
+Taylor expansion of this equation leads to the equation
+\begin{equation}
+2\gamma h = (\alpha^2 - 2\delta)k^2d^2.
+\label{eq:this_one}
+\end{equation}
+
+To ensure stability we need $\gamma <0$ which based on Eq. \ref{eq:this_one} gives us the required condition for stability, namely:
+\begin{equation}
+\delta > \frac{\alpha^2}{2}
+\end{equation}
+Interestingly this implies that it is possible to perform a numerical simulation that is stable but does not have physically realizable parameters. The requirements for realizability are stricter with $\alpha < 2\delta < 1$. These stricter requirements come by ensuring that none of the coefficients in Eq. \ref{eq:discrete_AD2} are negative.
+
+
+A quick experiment with the Advection-Diffusion equation, figure \ref{fig:fig}, using the values $\delta = .2$, $\alpha = .5$ shows that non-realizable solutions can also be stable. 
+
+\begin{figure}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/stable_not_realizable.png}
+		\caption{}
+		\label{fig:sfig1}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/stable_not_real_diagnostic.png}
+		\caption{}
+		\label{fig:sfig2}
+	\end{subfigure}
+	\caption{(a) The solution to the Advection-Diffusion equation with periodic boundary conditions after 650 time steps with $\delta = .2$, $\alpha = .5$, parameters that are stable, but not physically realizable. (b) Diagnostic plots confirming that the solution is stable, these values for the different diagnostics were normalized so as to fit on the same plot. Not that $M_1$ is not monotonically increasing as a consequence of the periodic boundary conditions, not a numerical error.}
+	\label{fig:fig}
+\end{figure}
+
+\section{}
+
+In order to efficiently compute the Diffusion equation in 1-D we realize that the transfer matrix T will be described by $T= {\delta, 1-2\delta, \delta}$. If we wish to impose Dirichlet boundary conditions on the simulation then we construct T below with an extra row and column at the extremes of the matrix to keep the edge values unchanged with the iterations.
+
+\begin{equation}
+T_{dif}=\begin{bmatrix}y 
+1       & 0 & 0 &\dots& \dots &0&0 \\
+a      & c & b & 0&\dots & 0 &0\\
+0& a & c & b & 0 &\dots & 0 \\
+\hdotsfor{7} \\
+0 &\dots & \dots & 0&a & c & b  \\
+0     &0  & 0 & \dots&\dots & 0&1
+\end{bmatrix}
+\label{eq:T_Diffusion}
+\end{equation}
+where $a = b =\delta$, and $c=1-2\delta$
+If we define $f_n$ as a vector of length NX at time step n then we can commute the state of the system at any time step by performing the operation
+\begin{equation}
+T^n * f_0 = f_n
+\label{eq:diffusion_prop}
+\end{equation}
+
+
+\subsection{Efficiency}
+From \cite{matrix_flops} we know that to multiply two N x N matrices together requires $2N^3$ flops. So the flops required to execute Eq. \ref{eq:diffusion_prop} should be $(2*NX^3)*n$ for $T^n$. This should account for the vast majority of the run time, and would predict with my processors max rate of 2.8 GHz a wall clock time of around 
+\begin{equation}
+	2*100^3*5000 / (2.8 * 10^9) \approx 3 seconds
+\end{equation}
+for NX = 100, and n = 5000. However, when I run this algorithm using the Numpy (numeric python library) command numpy.linalg.matrix\_power() I find my WCT to be only 5 ms. One unlikely, though pleasant, conclusion we could draw from this is that my cpu is actually operating in 10000 GHz range, unfortunately however, this seems implausible. A more likely explanation is that because T was defined as a tridiagonal matrix there are computational tricks that the Numpy library is using in order to radically reduce the computational cost of raising the matrix to a power. 
+
+\subsection{1-D Diffusion Diagnostics}
+\subsubsection{Mass}
+Based on our Dirichlet boundary conditions we should not expect mass to be conserved. This is easily seen if we imagine we are simulating heat flow, Dirichlet boundary conditions would mean that our system was embedded in a heat bath, so energy (heat) would not be conserved. This 
+is borne out in the simulations I performed. In simulations such as shown in figure \ref{fig:1D_diffu_diri1} where the Dirichlet boundaries had a higher value than the average of the initial condition the total mass, and entropy, of the system increased as time was run forward. The opposite effect occurred, figure \ref{fig:1D_diffu_diri0}, when the boundaries were held at 0, here they sucked mass away from the system and entropy ($H_2$ decreased).  
+
+
+\begin{figure}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/1D_diffusion.png}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/1D_diffusion_diag.png}
+		\caption{}
+	\end{subfigure}
+	\caption{(a)A plot of the results for a simulation of 1 dimensional diffusion with Dirichlet boundary conditions with the edges held at a value of 1. The initial conditions were a sharp Gaussian in the center of the simulation with a max value of one.. The legend refers to the time step at which each curve occurred. The curves are arranged later in time by increasing darkness. (b) Diagnostic plots confirming that the solution is slowly gaining mass and entropy over time. Note however, that the these values do not explode to infinity exponentially as we might expect for an unstable ($\gamma>0$) system. Rather they asymptote to values determined by the Dirichlet boundary conditions.}
+	\label{fig:1D_diffu_diri1}
+\end{figure}
+
+\begin{figure}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/1D_Diffusion_DirBound0.png}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/1D_Diffusion_DirBound0_diag.png}
+		\caption{}
+	\end{subfigure}
+	\caption{(a)A plot of the results for a simulation of 1 dimensional diffusion with Dirichlet boundary conditions with the edges held at a value of 1. The initial conditions were a sharp Gaussian in the center of the simulation with a max value of one . (b) Diagnostic plots confirming that the solution is slowly losing mass and entropy over time. Note however, that the these values do not oscillate into negative territory as we might expect for an unstable system. Rather they asymptote to values determined by the Dirichlet boundary conditions.}
+	\label{fig:1D_diffu_diri0}
+\end{figure}
+\subsection{1-D Advection Diffusion}
+This is easily extensible to solve the Advection-Diffusion equation, we simply need alternate values for a,b, and c for the definition of $T$, Eq. \ref{eq:diffusion_prop}.
+\begin{align}
+a = \delta + \frac{\alpha}{2}
+c = 1 - 4\delta
+b = \delta - \frac{\alpha}{2}
+\end{align}
+
+With this redefined T the numerical solution is just as efficient as before though the behavior of the solution, see Figure \ref{fig:1D_AD}, is somewhat more asymmetrical on account of the constant "wind" force provided by Advection.
+\begin{figure}
+	\includegraphics[width=\linewidth]{figures/1D_AD.png}%
+	\caption{A plot of the results for a simulation of 1 dimensional diffusion with Dirichlet boundary conditions. The initial conditions were a sharp Gaussian in the centered at .7, with a max value of one, and the two edge points were held to values of 1. In this simulation the space "fills up" from the left as a consequence of the "wind" of Advection. The wind pushes the initial Gaussian into the right wall where it is absorbed and prevents the right side boundary condition from contributing strongly to the rest of the simulated points. As in other plots the legend refers to the time step and darker values indicate a later time step. }
+	\label{fig:1D_AD}
+\end{figure}
+
+
+\section{2D Diffusion with Dirichlet BC}
+Extending our solution to 2D requires consideration of nearest neighbors in 2 rather than one dimension.  When using the 4 neighbors closely aligned on the grid we need to consider the rules defined by Eq. \ref{eq:dx} and \ref{eq:dx^2} for both spatial dimensions. This ultimately results in a transfer matrix described by $T_{jk} = \{\delta,1-4\delta,\delta\}$. Propagating this forward in time allows us to see the evolution of a system in 2D dimensions as in Figure \ref{fig:2D}
+\begin{figure}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/2D_Diffusion_DirBound0_init.png}
+		\caption{}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/2D_Diffusion_DirBound0_end.png}
+		\caption{}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/2D_Diffusion_DirBound0.png}
+		\caption{}
+	\end{subfigure}
+	\caption{(a) Initial condition for a simulation of the diffusion equation in 2 dimensions with the boundaries held to a Dirichlet condition at a value of 0. (b) Some time later the system has evolved and the average value is being pulled to zero by the boundary conditions. (c) A diagnostic plot confirms that the solution is slowly losing mass and entropy over time.}
+	\label{fig:2D}
+\end{figure}
+ 
+
+\section{Summary}
+In this work I derived the dispersion relation for the discrete version of the Advection-Diffusion equation and analyzed its numerical stability, find that we require $\alpha^2 < \delta$ is necessary for stability but not sufficient to have a physically realizable solution. Following this I implemented a numerical solver for the 1 and 2 Dimensional Diffusion equations and examined several diagnostics. This analysis revealed that the boundary conditions are very important 
+ a
+\section{Acknowledgements}
+I consulted with Jenny Coulter at various points while working on this problem set.
+
+  \begin{thebibliography}{1}
+  	
+  	\bibitem{matrix_flops} D. Olesky, Matrix Multiplication, Flop Counts and Block (Partitioned) Matrices, http://webhome.csc.uvic.ca/~dolesky/csc449-540/1.1-1.2.pdf
+
+  \end{thebibliography}
+
+
+
+\end{document}
