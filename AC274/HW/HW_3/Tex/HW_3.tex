@@ -26,72 +26,51 @@ Without a diffusive term
 
 
 
-In this document we will explore various numerical methods for propagating the Advection - Diffusion - Reaction equation forward in time. This equation describes physical processes and provides an opportunity to explore the limits of stability of numerical methods as well as different approaches to how to propagate time forward. 
-
-
 \section{Numerical Methods}
-In 1-D there are multiple ways to discretize Eq. \ref{eq:
+In 1-D there are ways to discretize the derivatives in Eq. \ref{eq:continuity}, with the most obvious being the centered difference or upwind approaches. Unfortunately in the case of the purely advective system we are considering the centered difference method will lead to an unstable solution. This could be considered to arise from the fact that in order to do this 
+
+The stability of the solution for the upwind time marching scheme will be determined by the CFL number with $\frac{u \Delta t}{\Delta X}\leq 1$
 \section{Understanding SHASTA}
-The continuous Advection-Diffusion Equation is:
-
-
-
-In order to numerically simulate this often physically relevant equation one method is known as the forward Euler method. In this method, space is discretized into a lattice of points with spacing $d$ between them. Likewise, time is discretized with the smallest possible time step being $h$. Using centered differences to replace the full derivatives we can go from a continuous equation to a discrete one:
+As presented by Boris and Book \cite{shasta} the SHASTA algorithm is very similar to the Flux Corrected Transport with explicit $\frac{1}{8}$ antidiffusion. However, instead of simply subtracting an antidiffusive quantity of equal magnitude to the diffusion introduced by the FCT scheme Boris and Book design a correction that prevents the creation of new local extrema. After the first step of FCT the correction is:
 \begin{equation}
-\frac{\varphi^{n+1}_j-\varphi^n_j}{h} = -U \frac{\varphi^n_{j+1}-\varphi^n_{j-1}}{2d} + D \frac{\varphi^n_{j+1}-2\varphi^n_{j}+\varphi^n_{j-1}}{d^2},
-\label{eq:discrete_AD1}
+\bar{\varphi}^n_j = \varphi_j^n + f^c_{j-\frac{1}{2}}-f^c_{j+\frac{1}{2}},
 \end{equation}
-in this equation the superscript represents the time coordinate of $\varphi$ and the subscript, the position on the simulation lattice. Simplifying our notation with $\varphi^n \to \varphi$ and $\varphi^{n+1} \to \hat{\varphi}$, as well as introducing $\alpha = \frac{Uh}{d}$, and $\delta=\frac{Dh}{d^2}$  we can reduce Eq. \ref{eq:discrete_AD1} to:
+where $\bar{\varphi}^n_j$ is the corrected value and the $f^c$ are defined below so as to prevent the creation of local extrema. With $\Delta_{j+\frac{1}{2}} = \varphi^n_{j+1} - \varphi^n_{j}$, $\Delta_{j-\frac{1}{2}} = \varphi^n_{j} - \varphi^n_{j-1}$, and $\Delta_{j\pm\frac{3}{2}}$ defined similarly we can define $f^c$ as follows:
 
 \begin{equation}
-	\hat{\varphi_j} = (\delta+\frac{1}{2}\alpha)\varphi_{j+1} +(1-2\delta)\varphi_{j}+(\delta-\frac{1}{2}\alpha)\varphi_{j-1}. 
-	\label{eq:discrete_AD2}
+f^c_{j+\frac{1}{2}} = sgn(\Delta_{j+\frac{1}{2}}) \text{Max}\left(0,\text{Min}\left(\Delta_{j-\frac{1}{2}} sgn(\Delta_{j+\frac{1}{2}}), \frac{1}{8}|\Delta_{j+\frac{1}{2}}|,\Delta_{j+\frac{3}{2}} sgn(\Delta_{j+\frac{1}{2}}\right)\right)
+\label{eq:def_fc_right}
 \end{equation}
-Giving us a transfer matrix described by $T_{jk} = \{\delta-\frac{\alpha}{2},1-2\delta,\delta+\frac{\alpha}{2}\}$, where the solution could be propagated forward in time by repeatedly multiplying the matrix T with the vector of point values $\vec{\varphi}$. 
-This is a result that would could have immediately arrived at if we considered the following relation of spatial derivatives to the transfer matrix.
-\begin{equation}
-\frac{d}{dx} \Leftrightarrow \frac{1}{2d}\{-1,0,1\},
-\label{eq:dx}
-\end{equation}
-\begin{equation}
-\frac{d^2}{dx^2} \Leftrightarrow \frac{1}{d^2}\{1,-2,1\}
-\label{eq:dx^2}
-\end{equation}
-%
+This equation considers where "mass" could have gone from, or come into point $j$ due to numerical diffusion. It then selects the smallest possible correction with a sign chosen based on the relative magnitudes of $\varphi^n_{j+1}$ and $\varphi^n_{j}$. While, Boris and Book do not provide an equation for $f^c_{j-\frac{1}{2}}$ by considering the intention of how the correction term works we can construct it as follows:
 
 \begin{equation}
-T_{ADR}=\begin{bmatrix} 
-1       & 0 & 0 &\dots& \dots &0&0 \\
-a      & c & b & 0&\dots & 0 &0\\
-0& a & c & b & 0 &\dots & 0 \\
-\hdotsfor{7} \\
-0 &\dots & \dots & 0&a & c & b  \\
-0     &0  & 0 & \dots&\dots & 0&1
-\end{bmatrix}
-\label{eq:T_Diffusion_2}
+f^c_{j-\frac{1}{2}} = sgn(\Delta_{j-\frac{1}{2}}) \text{Max}\left(0,\text{Min}\left(\Delta_{j+\frac{1}{2}} sgn(\Delta_{j-\frac{1}{2}}), \frac{1}{8}|\Delta_{j-\frac{1}{2}}|,\Delta_{j-\frac{3}{2}} sgn(\Delta_{j-\frac{1}{2}}\right)\right).
+\label{eq:def_fc_left}
 \end{equation}
-where $a = \delta +\frac{\alpha}{2}$, $b =\delta-\frac{\alpha}{2}$, and $c=1-2\delta +\kappa$, with $\kappa = r h$. 
+This construction of $f^c_{j-\frac{1}{2}}$ is the only one that maintains the symmetry of the corrective equation, simply shifting the subscript values by -1 would not be result in proper correction to the FCT method. 
+
+\section{Results}
+A square waveform being advected to the right was simulated using the upwind, Lax-Wendroff, Flux Corrected Transport(FCT), FCT + Antidiffusion, and the FCT + Boris and Book correction methods. A comparison of the results of each of these methods can be seen in Figures \ref{fig:constU_f_compare}, and \ref{fig:constU_f_compare_offset}. As expected the upwind scheme does not induce wiggles in the solution, however it does suffer from a numerical diffusion causing the initial square waveform to degrade into a Gaussian waveform. 
 
 
 \begin{figure}
-	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=.8\linewidth]{figures/constU_fCompare.png}
-		\caption{}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/constU_fCompare_offset.png}
-		\caption{}
-	\end{subfigure}
-	\caption{}
+
+	\caption{Comparison of the different approaches to numerically solving Eq. \ref{eq:continuity}. In this comparison we can see that the center of mass is propagated at the same velocity regardless of the time marching method or corrective diffusion steps used. For an easier comparison of profile shapes consider Figure \ref{fig:constU_f_compare_offset}. }
 	\label{fig:constU_f_compare}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/constU_fCompare_offset.png}
+	\caption{Comparison of the different approaches to numerically solving Eq. \ref{eq:continuity} after 600 time steps with an initial wave form of a square wave. In this comparison the waveforms have been offset in X from each other so as to compare their shape. Overall the results of this comparison are as expected, with both the Upwind and FCT methods showing strong dispersion, Lax-Wendroff ad FCT + Antidiffusion maintaining the basic square wave shape, but with wiggles, and finally the SHASTA method developed by Boris and Book providing the most accurate results. A comparison of the level diffusion in each method can be seen in Figure \ref{fig:constU_compareH}. }
+	\label{fig:constU_f_compare_offset}
 \end{figure}
 \begin{figure}
 
 		\centering
 		\includegraphics[width=.8\linewidth]{figures/constU_compareH.png}
-		\caption{}
+		\caption{Comparison of the quantity $H_2$, which serves as a measure of the localization (or entropy) of the solution. In this case we can use this as a proxy measure for the amount of numerical diffusion introduced by our solution method, with lower values of $H_2$ corresponding to greater amounts of diffusion. The results here agree with visual inspection of Figure \ref{fig:constU_f_compare_offset}, though they provide a more quantitative sense of the differences of diffusion in the methods. While the SHASTA method is unquestionably the most accurate we can see here that while avoiding wiggles, it does less well than Lax-Wendroff or FCT+Antidiffusion at preventing numerical diffusion.}
 	\label{fig:constU_compareH}
 \end{figure}
 
