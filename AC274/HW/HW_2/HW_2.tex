@@ -24,7 +24,7 @@
 	\item Extended the Summary section
 \end{enumerate}
 \section{Introduction}
-In this document we will explore various numerical methods for propagating the Advection - Diffusion - Reaction equation forward in time. This equation describes physical processes and provides an opportunity to explore the limits of stability of numerical methods as well as different approaches to how to propagate time forward. 
+In this document we will explore various numerical methods for propagating the Advection - Diffusion - Reaction equation forward in time. This equation describes many physical processes and provides an opportunity to explore the limits of stability of numerical methods as well as different approaches to how to propagate time forward. 
 
 \section{Problem 1 - HW 1}
 The continuous Advection-Diffusion Equation is:
@@ -32,7 +32,7 @@ The continuous Advection-Diffusion Equation is:
 \partial_t \varphi = -U \partial_x \varphi + D \partial_{xx}\varphi.
 \label{eq:AD_cont}
 \end{equation}
-In order to numerically simulate this often physically relevant equation one method is known as the forward Euler method. In this method, space is discretized into a lattice of points with spacing $d$ between them. Likewise, time is discretized with the smallest possible time step being $h$. Using centered differences to replace the full derivatives we can go from a continuous equation to a discrete one:
+In order to numerically simulate this often physically relevant equation one method to step forward in time is Forward Euler. In this method, space is discretized into a lattice of points with spacing $d$ between them. Likewise, time is discretized with the smallest possible time step being $h$. Using centered differences to replace the full spatial derivatives we can go from a continuous equation to a discrete one:
 \begin{equation}
 \frac{\varphi^{n+1}_j-\varphi^n_j}{h} = -U \frac{\varphi^n_{j+1}-\varphi^n_{j-1}}{2d} + D \frac{\varphi^n_{j+1}-2\varphi^n_{j}+\varphi^n_{j-1}}{d^2},
 \label{eq:discrete_AD1}
