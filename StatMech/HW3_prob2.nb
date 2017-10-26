@@ -1,0 +1,305 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      8287,        297]
+NotebookOptionsPosition[      7279,        257]
+NotebookOutlinePosition[      7819,        278]
+CellTagsIndexPosition[      7776,        275]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ "Problem 2. d.\n\n",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["Z", "Odd"], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Chapter",
+ CellChangeTimes->{{3.717809014076939*^9, 3.7178090267924643`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"f", "[", "l_", "]"}], ":=", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"4", " ", "l"}], "+", "3"}], ")"}], " ", 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"4", " ", 
+          SuperscriptBox["l", "2"]}], "+", 
+         RowBox[{"6", " ", "l"}], " ", "+", "2"}], ")"}]}], 
+      FractionBox["\[Theta]", "T"]}]]}]}], " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"a", " ", "=", " ", 
+   RowBox[{"Assuming", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Re", "[", 
+       FractionBox["\[Theta]", "T"], "]"}], ">", "0"}], ",", 
+     RowBox[{"Integrate", "[", 
+      RowBox[{
+       RowBox[{"f", "[", "l", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"l", ",", "0", ",", "\[Infinity]"}], "}"}]}], "]"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Expand", "[", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{"a", "+", 
+    FractionBox[
+     RowBox[{"f", "[", "0", "]"}], "2"], "-", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"f", "'"}], "[", "0", "]"}], "12"], "+", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"f", "'''"}], "[", "0", "]"}], "720"]}], "]"}], "]"}]}], "Input",\
+
+ CellChangeTimes->{{3.717759374279896*^9, 3.7177594191406517`*^9}, {
+   3.717759594462226*^9, 3.717759627847609*^9}, {3.717759689266953*^9, 
+   3.7177597069070272`*^9}, {3.717759774117837*^9, 3.71775977460852*^9}, {
+   3.717795168220837*^9, 3.717795168636671*^9}, {3.7177953881079063`*^9, 
+   3.7177954330703773`*^9}, 3.717809224997912*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   FractionBox["7", "6"], " ", 
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{"-", 
+     FractionBox[
+      RowBox[{"2", " ", "\[Theta]"}], "T"]}]]}], "+", 
+  FractionBox[
+   RowBox[{
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"2", " ", "\[Theta]"}], "T"]}]], " ", "T"}], 
+   RowBox[{"2", " ", "\[Theta]"}]], "+", 
+  FractionBox[
+   RowBox[{"41", " ", 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"2", " ", "\[Theta]"}], "T"]}]], " ", "\[Theta]"}], 
+   RowBox[{"30", " ", "T"}]], "+", 
+  FractionBox[
+   RowBox[{"6", " ", 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"2", " ", "\[Theta]"}], "T"]}]], " ", 
+    SuperscriptBox["\[Theta]", "2"]}], 
+   RowBox[{"5", " ", 
+    SuperscriptBox["T", "2"]}]], "-", 
+  FractionBox[
+   RowBox[{"9", " ", 
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"2", " ", "\[Theta]"}], "T"]}]], " ", 
+    SuperscriptBox["\[Theta]", "3"]}], 
+   RowBox[{"10", " ", 
+    SuperscriptBox["T", "3"]}]]}]], "Output",
+ CellChangeTimes->{
+  3.7177596302924423`*^9, 3.717759708061246*^9, 3.717759775532467*^9, 
+   3.7177951696237993`*^9, {3.7177954028758793`*^9, 3.7177954436108*^9}, 
+   3.71780922880061*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Now taylor approx exp term and keep up to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    FractionBox["\[Theta]", "T"], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Section",
+ CellChangeTimes->{{3.717809077004361*^9, 3.717809121435235*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Expand", "[", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"1", "-", 
+     RowBox[{"2", 
+      FractionBox["\[Theta]", "T"]}], "+", 
+     RowBox[{"2", 
+      FractionBox[
+       SuperscriptBox["\[Theta]", "2"], 
+       SuperscriptBox["T", "2"]]}]}], ")"}], 
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox["T", 
+      RowBox[{"2", " ", "\[Theta]"}]], "+", 
+     FractionBox["7", "6"], "+", 
+     RowBox[{
+      FractionBox["41", "30"], 
+      FractionBox["\[Theta]", "T"]}]}], ")"}]}], "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "6"], "+", 
+  FractionBox["T", 
+   RowBox[{"2", " ", "\[Theta]"}]], "+", 
+  FractionBox["\[Theta]", 
+   RowBox[{"30", " ", "T"}]], "-", 
+  FractionBox[
+   RowBox[{"2", " ", 
+    SuperscriptBox["\[Theta]", "2"]}], 
+   RowBox[{"5", " ", 
+    SuperscriptBox["T", "2"]}]], "+", 
+  FractionBox[
+   RowBox[{"41", " ", 
+    SuperscriptBox["\[Theta]", "3"]}], 
+   RowBox[{"15", " ", 
+    SuperscriptBox["T", "3"]}]]}]], "Output",
+ CellChangeTimes->{3.7178091157785883`*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[Cell[BoxData[
+ FormBox[
+  SubscriptBox["Z", "Even"], TraditionalForm]],
+ FormatType->"TraditionalForm"]], "Chapter",
+ CellChangeTimes->{{3.71779519743995*^9, 3.717795205825485*^9}, {
+  3.7178090501055593`*^9, 3.717809057985423*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.717809138709524*^9, 3.717809141993668*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"feven", "[", "l_", "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"4", " ", "l"}], " ", "+", "1"}], ")"}], 
+   SuperscriptBox["\[ExponentialE]", 
+    RowBox[{
+     RowBox[{"-", "2"}], " ", "l", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", "l"}], "+", "1"}], ")"}], 
+     FractionBox["\[Theta]", "T"]}]]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", " ", "=", " ", 
+   RowBox[{"Assuming", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Re", "[", 
+       FractionBox["\[Theta]", "T"], "]"}], ">", "0"}], ",", 
+     RowBox[{"Integrate", "[", 
+      RowBox[{
+       RowBox[{"feven", "[", "l", "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"l", ",", "0", ",", "\[Infinity]"}], "}"}]}], "]"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Expand", "[", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{"b", "+", 
+    FractionBox[
+     RowBox[{"feven", "[", "0", "]"}], "2"], "-", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"feven", "'"}], "[", "0", "]"}], "12"], "+", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"feven", "'''"}], "[", "0", "]"}], "720"]}], "]"}], 
+  "]"}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "6"], "+", 
+  FractionBox["T", 
+   RowBox[{"2", " ", "\[Theta]"}]], "+", 
+  FractionBox["\[Theta]", 
+   RowBox[{"30", " ", "T"}]], "+", 
+  FractionBox[
+   RowBox[{"2", " ", 
+    SuperscriptBox["\[Theta]", "2"]}], 
+   RowBox[{"15", " ", 
+    SuperscriptBox["T", "2"]}]], "-", 
+  FractionBox[
+   SuperscriptBox["\[Theta]", "3"], 
+   RowBox[{"90", " ", 
+    SuperscriptBox["T", "3"]}]]}]], "Output",
+ CellChangeTimes->{3.717809162575979*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{3200, 1758},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"PaperOrientation"->"Portrait",
+"PaperSize"->{594.75, 842.25},
+"PostScriptOutputFile"->""},
+Magnification:>2. Inherited,
+FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 227, 7, 307, "Chapter"],
+Cell[CellGroupData[{
+Cell[832, 33, 1595, 46, 267, "Input"],
+Cell[2430, 81, 1357, 43, 140, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3824, 129, 284, 8, 148, "Section"],
+Cell[CellGroupData[{
+Cell[4133, 141, 521, 18, 142, "Input"],
+Cell[4657, 161, 508, 17, 130, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5226, 185, 246, 5, 133, "Chapter"],
+Cell[5475, 192, 92, 1, 65, InheritFromParent],
+Cell[CellGroupData[{
+Cell[5592, 197, 1175, 38, 266, "Input"],
+Cell[6770, 237, 481, 16, 130, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
