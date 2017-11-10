@@ -6,10 +6,10 @@ c ================================
 
 c ------- input parameters
 
-        omega=1.d0 
+        omega=1.d0
 
 	call input
-	
+
 c -------initialisation
 
 	call inithydro1
@@ -25,16 +25,16 @@ c ------- MAIN LOOP
            call hydrovar2
            if (iforce) then
               call force
-           endif 
+           endif
            call equili
            call collis
            call hydrovar1
            call media
 
-c mixed boundary conditions 
+c mixed boundary conditions
 c (Poiseuille flow)
 c	   call mbc
-	   
+
 c Obstacle ?
 c	   if (iobst) then
 c	       call obstbc
@@ -72,7 +72,7 @@ c	   endif
 
 
 c-------- end of main loop
-            
+
 10	continue
 
 
@@ -107,11 +107,11 @@ c---------------------------------------------------
         read(5,*)rhopsi
 
         print*,'Applied force  (.TRUE. or .FALSE.) ?'
-	read(5,*)iforce 
+	read(5,*)iforce
 
 	print*,' Initial density'
 	read(5,*)rhoin
-     
+
         print*,' Initial X velocity component'
         read(5,*)u0
 
@@ -159,7 +159,7 @@ clamur        open(10,file=fileout//'.uy',status='new')
         print*,'  developed and released by Prof. GIACOMO FALCUCCI, PhD'
         print*,'        for AC274 Class at HARVARD University'
         print*,'                         2017'
-        call sleep(1)
+c        call sleep(1)
 
         !gnnn = gnn   ! isotropy of the Shan-Chen Interaction
 
@@ -204,15 +204,15 @@ c constants
 
         w0=1.d0-(4.d0*w1+4.d0*w2+4.d0*w4+8.d0*w5+4.d0*w8)
 
-! calcolo delle distanze reticolari al quadrato per la subroutine ENERGY        
+! calcolo delle distanze reticolari al quadrato per la subroutine ENERGY
 
         c1_2=1.d0
         c2_2=2.d0
 
         c4_2=4.d0
         c5_2=5.d0
-        c8_2=8.d0 
-        
+        c8_2=8.d0
+
 
 
         w(0) = 4.d0/9.d0
@@ -223,15 +223,15 @@ c constants
 
 !       w1=1.d0/9.d0
 !       w2=1.d0/36.d0
-!       w0=4.d0/9.d0 
-        
-        
+!       w0=4.d0/9.d0
+
+
 
 
 
 c reduced density
 
-	den = rhoin/float(npop) 
+	den = rhoin/float(npop)
 
 
 c scaling
@@ -250,12 +250,12 @@ c calculation of the constant applied force
 	fpois = 8.0d0 * visc * uf / dfloat(ny) / dfloat(ny)
         fpois = rhoin*fpois/6.  ! # of biased populations
 	print*,' Intensity of the applied force ',fpois
-	
+
 	return
 	end
 c--------------------------------------------------
 	subroutine inithydro1
-	
+
 	implicit double precision(a-h,o-z)
 	include 'muphase.par'
 c---------------------------------------------------
@@ -272,26 +272,26 @@ c---------------------------------------------------
 
 ! TOTAL RANDOM PERTURBATION
 
-        do j = 1, ny
-          do i = 1, nx
+!        do j = 1, ny
+!          do i = 1, nx
 
-           rhod1(i,j) = rhoin*(1.d0 + 0.01d0 * (rand(0) - 0.5d0) * 2.d0)
+ !          rhod1(i,j) = rhoin*(1.d0 + 0.01d0 * (rand(0) - 0.5d0) * 2.d0)
 
 ! CIRCULAR DROPLET IN THE MIDDLE
 
-!!      do j = 0,ny+1
-!!       do i =0,nx+1
+      do j = 0,ny+1
+       do i =0,nx+1
 !!
-!!        if(((i-nx/2)**2+(j-ny/2)**2).lt.400) then
-!!          rhod1(i,j)=2.410d0*(1.d0 + 0.01d0 * (rand(0) - 0.5d0) * 2.d0) !Con Mauro fino a 2.837 ma SENZA PERTURB!!!!!!
-!!         else
-!!          rhod1(i,j)=0.1250d0
-!!        endif
- 
+        if(((i-nx/2)**2+(j-ny/2)**2).lt.400) then
+          rhod1(i,j)=2.410d0*(1.d0 + 0.01d0 * (rand(0) - 0.5d0) * 2.d0) !Con Mauro fino a 2.837 ma SENZA PERTURB!!!!!!
+         else
+          rhod1(i,j)=0.1250d0
+        endif
+
        enddo
       enddo
 
-! PERTURBAZIONE MULTIGOCCE                  
+! PERTURBAZIONE MULTIGOCCE
 
 !      do j = 0,ny+1
 !       do i =0,nx+1
@@ -310,16 +310,16 @@ c---------------------------------------------------
 
 !      write(*,*)'! DEBUG ! 01 rhod1:', rhod1(32,32), rhod1(10,10)
 
-	return	
+	return
 	end
 
 c --------------------------------------------------
 	subroutine initpop
-	
+
 	implicit double precision(a-h,o-z)
 	include 'muphase.par'
 c---------------------------------------------------
-           
+
         if(dump.eq.1)then
          call resume
         else
@@ -357,7 +357,7 @@ c----------------------------------------------
 	include 'muphase.par'
 c---------------------------------------------
         do j = 0,ny+1
-           do i = 0, nx+1 
+           do i = 0, nx+1
               do k=0,npop
                  fp(k,i,j)=f(k,i,j)
               enddo
@@ -410,18 +410,18 @@ c Calculation of velocities and pseudopotential
 	do j = 1, ny
 	  do i = 1, nx
 
-           rho1 = 1.d0 / rhod1(i,j)        
+           rho1 = 1.d0 / rhod1(i,j)
 
-	   u1(i,j) = ( f(1,i,j) - f(3,i,j) + f(5,i,j) - 
-     &              f(6,i,j) - f(7,i,j) + f(8,i,j) ) * rho1 
+	   u1(i,j) = ( f(1,i,j) - f(3,i,j) + f(5,i,j) -
+     &              f(6,i,j) - f(7,i,j) + f(8,i,j) ) * rho1
 
 	   v1(i,j) = ( f(5,i,j) + f(2,i,j) + f(6,i,j)
      &              - f(7,i,j) - f(4,i,j) - f(8,i,j) ) * rho1
 
-     
+
           enddo
 	enddo
-		
+
 	return
 	end
 
@@ -472,18 +472,18 @@ c-------------------------------------------------
 c-------------------------------------------------
 	do j = 1, ny
 	   do i = 1, nx
-	     usq = u1(i,j) * u1(i,j) 
+	     usq = u1(i,j) * u1(i,j)
 	     vsq = v1(i,j) * v1(i,j)
 	     sumsq = (usq + vsq) / cs22
 	     sumsq2 = sumsq * (1.0d0 - cs2) / cs2
-	     u22 = usq / cssq 
+	     u22 = usq / cssq
              v22 = vsq / cssq
 	     ui = u1(i,j) / cs2
 	     vi = v1(i,j) / cs2
 	     uv = ui * vi
              rhoij = rhod1(i,j)
 
-	     
+
 
 	     feq(0,i,j) = (4.d0/9.d0)*rhoij*(1.0d0 - sumsq)
 
@@ -492,15 +492,15 @@ c-------------------------------------------------
 	     feq(3,i,j) = (1.d0/9.d0)*rhoij*(1.0d0 - sumsq + u22 - ui)
 	     feq(4,i,j) = (1.d0/9.d0)*rhoij*(1.0d0 - sumsq + v22 - vi)
 
-	     feq(5,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 + ui + vi 
+	     feq(5,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 + ui + vi
      &		 + uv)
-	     feq(6,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 - ui + vi 
+	     feq(6,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 - ui + vi
      &	 - uv)
-	     feq(7,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 - ui - vi 
+	     feq(7,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 - ui - vi
      &	 + uv)
 	     feq(8,i,j) = (1.d0/36.d0)*rhoij*(1.0d0 + sumsq2 + ui - vi
      &   - uv)
-	
+
 	   enddo
 	enddo
 
@@ -513,7 +513,7 @@ c----------------------------------------------------------
 	include 'muphase.par'
 
 c----------------------------------------------------------
-!        omt=omega * dt  
+!        omt=omega * dt
 	 do j = 1, ny
 	   do i = 1, nx
 	     do k = 0, npop-1
@@ -523,7 +523,7 @@ c----------------------------------------------------------
 	   end do
 	 end do
 
-	return 
+	return
 	end
 
 c===========================================
@@ -535,10 +535,10 @@ c--------------------------------------------------------
 
           do i=1,nx
             do j=1,ny
- 
+
               u1(i,j)=(u1(i,j)+u2(i,j))*0.5d0
               v1(i,j)=(v1(i,j)+v2(i,j))*0.5d0
-   
+
             end do
           end do
 	return
@@ -550,14 +550,14 @@ c ==========================================
 	include 'muphase.par'
 c--------------------------------------------------------
 
-        frce = fpois   ! constant external force  
+        frce = fpois   ! constant external force
         do i=-1,nx+2
          do j=-1,ny+2    ! ho levato le BC per psi!!!
-     
+
             psi(i,j) =rhopsi * ( 1.d0 - exp(- rhod1(i,j) / rhopsi))
-             
+
          enddo
-        enddo      
+        enddo
 
 
         wnn=w1/cs2
@@ -581,8 +581,8 @@ c non local Lennard-Jones (may put a density functional, not density itself)
 
 ! calcolo delle forze di interazione, consederando i pesi anche in esse
 
-         f2x =-(gnn * fnnx*1./9.+ gnn * fnnnx *1./36.)  ! 
-         f2y =-(gnn * fnny*1./9.+ gnn * fnnny *1./36.)  !  
+         f2x =-(gnn * fnnx*1./9.+ gnn * fnnnx *1./36.)  !
+         f2y =-(gnn * fnny*1./9.+ gnn * fnnny *1./36.)  !
 
 
         force_x(i,j)=f2x  !+f2xn
@@ -602,7 +602,7 @@ c non local Lennard-Jones (may put a density functional, not density itself)
 !       write(6,*) 'Debug force_32',f_x(32,32),f_2x(32,32)
 !       write(6,*) 'Debug force_64',f_x(64,64),f_2x(64,64)
 
-    
+
 
 ! SHIFT EQUILIBRIO
 
@@ -610,11 +610,11 @@ c non local Lennard-Jones (may put a density functional, not density itself)
           do j=1,ny
 
            u1(i,j)=u1(i,j)+force_x(i,j)/(omega*rhod1(i,j))
-       
-           v1(i,j)=v1(i,j)+force_y(i,j)/(omega*rhod1(i,j)) 
+
+           v1(i,j)=v1(i,j)+force_y(i,j)/(omega*rhod1(i,j))
 
           end do
-       end do 
+       end do
 
 
         return
@@ -701,7 +701,7 @@ c-----------------------------------------------------------
 	end
 c-------------------------------------------------------------
 	subroutine mbc
-	
+
 	implicit double precision(a-h,o-z)
 	include 'muphase.par'
 c-------------------------------------------------------------
@@ -745,8 +745,8 @@ c ==========================
 	implicit double precision(a-h,o-z)
 	include 'muphase.par'
 c--------------------------------------------------------
-	k = nx / 4	
-	
+	k = nx / 4
+
         do j = ny/2-nobst/2+1,ny/2+nobst/2
            f(1,k+1,j) = f(3,k+1,j)
 	   f(3,k  ,j) = f(1,k,j)
@@ -799,7 +799,7 @@ c----------------------------------------------------------
 
  99     format(2I6,3(1x,e13.6))
 
-        
+
         return
         end
 
@@ -855,7 +855,7 @@ c----------------------------------------------------------
          write(86,98) istep,en_pot_1,en_pot_2,en_pot_1+en_pot_2,en_cin,
      &                en_pot,(en_pot_1+en_pot_2)/en_cin
 
-98      format(1I6,1x,6(1x,e13.6)) 
+98      format(1I6,1x,6(1x,e13.6))
 
 ! proviamo ora a calcolare l'energia potenziale SENZA i C_i^2, come proposto
 ! dal Prof. Succi l' 11 - 03 - 2007
@@ -1002,7 +1002,7 @@ c----------------------------------------------------------
 
 91         format(1I6,1x,7(1x,e13.6))
 
-        
+
 
 !]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -1016,12 +1016,12 @@ c----------------------------------------------------------
             endif
 
           enddo
-        enddo 
+        enddo
 
 
 !  Il file seguente è per il numero di bolle  !!!!!
 
- 
+
 !#        write(84,*)istep,nliq
 
         return
@@ -1043,7 +1043,7 @@ c----------------------------------------------------------
 	   enddo
 	enddo
 
-	densit = densit / dfloat(nx*ny) 
+	densit = densit / dfloat(nx*ny)
 
 	do i = 1, nx
 	   do j= 1, ny
@@ -1076,12 +1076,12 @@ c----------------------------------------------------------
 	      vmoy = vmoy + v1(i,j)
 	   enddo
 	enddo
-	
+
 	umoy = umoy / dfloat(nx*ny)
 	vmoy = vmoy / dfloat(nx*ny)
 
 c	print*,'istep density umoy and vmoy'
-        write(*,*)'Debug continuità'  
+        write(*,*)'Debug continuità'
         write(*,'(6e18.10)') dfloat(istep),densit,umoy,vmoy
 
         write(92,'(I6,3(1x,e13.6))')istep,densit,umoy,vmoy
@@ -1094,8 +1094,8 @@ c        write(*,'(6e18.10)') paramord
         do i = 1, nx
           do j = 1, ny
             rhomax = max(rhomax,rhod1(i,j))
-            rhomin = min(rhomin,rhod1(i,j)) 
-        
+            rhomin = min(rhomin,rhod1(i,j))
+
          enddo
         enddo
 
@@ -1106,7 +1106,7 @@ c        write(*,'(6e18.10)') paramord
         print *,' rhomax rhomin'
         write(*,'(6e18.10)')densit,rhomax,rhomin
 
-       print*,'============================================='  
+       print*,'============================================='
 
 
 !       p=0.d0
@@ -1138,7 +1138,7 @@ c----------------------------------------------------------
 
        write(6,*)'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
        write(6,*)'salvataggio popolazioni in corso....'
-       write(6,*)'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'  
+       write(6,*)'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
 
 
        rewind(111)
@@ -1147,12 +1147,12 @@ c----------------------------------------------------------
 
         do j=0,ny+1
          do i=0,nx+1
-          do k=0,npop-1 
-            write(111)f(k,i,j)      
+          do k=0,npop-1
+            write(111)f(k,i,j)
           enddo
          enddo
-        enddo 
-     
+        enddo
+
         do j=1,ny
          do i=1,nx
             write(113)u1(i,j),v1(i,j)
@@ -1169,14 +1169,14 @@ c----------------------------------------------------------
 !        write(114)f
 
 
- 
+
         write(6,*)'.....fatto!!! :^)'
-   
+
        return
        end
-       
+
 c ============================
-        subroutine resume 
+        subroutine resume
 c ============================
         implicit double precision(a-h,o-z)
         include 'muphase.par'
@@ -1215,12 +1215,12 @@ c ============================
         implicit double precision(a-h,o-z)
         include 'muphase.par'
 c----------------------------------------------------------
-   
+
 
          do j=1,ny
            do i=1,nx
               iflag(i,j)=0
-              if(rhod1(i,j).gt.0.865d0)then 
+              if(rhod1(i,j).gt.0.865d0)then
                 iflag(i,j)=1
               endif
            enddo
@@ -1239,7 +1239,7 @@ c----------------------------------------------------------
               endif
 
            enddo
-         enddo    
+         enddo
 
          isurf=isurf/2.d0
 
@@ -1262,7 +1262,7 @@ c----------------------------------------------------------
 
            integer L,i,j,k,k1,q,kx,ky,interf,in,jn
            parameter (L=nx)!lattice size,must be 2^n,the same in x & y directions
-   
+
            real*8 dx !lattice spacing
 !           parameter (dx=1.d0)
            real*8 pi
@@ -1280,8 +1280,8 @@ c----------------------------------------------------------
            nn(1)=L
            nn(2)=L
            dq=2.d0*pi/(L*dx) !spacing in Fourier space
-   
-   
+
+
 !              open(23,file='BGK01.ruv2d',status='old')
 !                  do j=1,L
 !                   do i=1,L
@@ -1289,7 +1289,7 @@ c----------------------------------------------------------
 !                   enddo
 !                 enddo
 !                close(23)
-!   
+!
 !             do j=1,L
 !               do i=1,L
 !                 x1(i,j)=dsin(2.d0*pi/L*8*(i))
@@ -1305,47 +1305,47 @@ c----------------------------------------------------------
 
                enddo
              enddo
-   
+
                 av=0.d0
                 do i=1,L
                   do j=1,L
-   
+
                     av=av+x1(i,j)
-   
+
                   enddo
                 enddo
                 av=av/L/L
-   
+
                     print*,av
-   
+
                 do i=1,L
                   do j=1,L
-   
+
                     x(i,j)=x1(i,j)-av
-   
+
                   enddo
                 enddo
-   
-   
+
+
                    do i=1,L
                       do j=1,L
-   
+
                    fourdata(2*((i-1)*L+j-1)+1) = x(i,j)
                    fourdata(2*((i-1)*L+j-1)+2) = 0.d0
-   
+
                       enddo
                    enddo
-   
-   
+
+
                    call fourn(fourdata,nn,2,1)
-   
+
            do i=1,L
            do j=1,L
-   
-           C= ((fourdata(2*((i-1)*L+j-1)+1))**2 
+
+           C= ((fourdata(2*((i-1)*L+j-1)+1))**2
      &       +(fourdata(2*((i-1)*L+j-1)+2))**2)!**(0.5d0)
            C=C/(L*L)
-   
+
            if(i.le.L/2.and.j.le.L/2)then
            kx=i-1
            ky=j-1
@@ -1365,13 +1365,13 @@ c----------------------------------------------------------
            endif
            enddo
            enddo
-   
+
 !           do ky=-L/2,L/2-1
 !           do kx=-L/2,L/2-1
 !             write(50,*)kx*dq,ky*dq,G(kx,ky)
 !           enddo
 !           enddo
-   
+
            do k=0,L
            SC(k)=0.d0
            SCC(k)=1.d0
@@ -1393,18 +1393,18 @@ c----------------------------------------------------------
            S1=0.d0
            do k=1,L/2
            SC(k)=SC(k)/SCC(k)
-   
+
             write(177,*)k,SC(k)
-   
+
            Z=Z+dq*SC(k)
            q=k
            S1=S1+dq*abs(dq*q)*SC(k)
            enddo
             write(177,'(bn)')
-            write(177,'(bn)')  
+            write(177,'(bn)')
 
            radius=pi*Z/S1
-   
+
                   interf=0
                   do i=1,L
                   do j=1,L
@@ -1420,20 +1420,20 @@ c----------------------------------------------------------
                   endif
                   enddo
                   enddo
-   
-   
+
+
 !                  print*,'radius =',radius,'1/interf =',1.d0/interf
-   
+
                   write(117,*)istep,radius
 !     &           (float(L)/2)*radius/6.283185307179586476925287d0
-   
+
 !c radius e 1/interf sono due misure diverse della taglia dei domini
 
 !c radius e' ottenuta come l'inverso del primo momento del fattore di
 !c    struttura mediato circolarmente
-   
+
 !c 1/interf e' l'inverso della lunghezza delle interfacce del sistema
-   
+
 !         do kx=-L/2,L/2
 !            do ky=-L/2,L/2
 !               write(130,*)kx,ky,G(kx,ky)
@@ -1442,13 +1442,13 @@ c----------------------------------------------------------
 !               endif
 !            enddo
 !         enddo
-   
+
            return
            end
-   
-   
-   
-   
+
+
+
+
            subroutine fourn(data,nn,ndim,isign)
            implicit real*8 (a-h), real*8 (o-z)
            dimension nn(ndim),data(*)
@@ -1518,8 +1518,8 @@ c----------------------------------------------------------
            enddo
            return
            end
-   
-  
+
+
 
 c ============================
         subroutine laplace
@@ -1596,11 +1596,10 @@ c----------------------------------------------------------
 
           write(*,*) 'il raggio della bolla è', radius
 
-          surf_tens = (p(nx/2,ny/2)-p(nx/16,ny/16))*radius
+          surf_tens = (p(nx/2,ny/2)-p(nx/16,ny/16))
 
           write(*,*) 'Laplace test: gamma = ', surf_tens
 
 
           return
           end
- 
