@@ -1,0 +1,76 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage{subfig}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+%\usepackage[demo]{graphicx}
+%opening
+\title{Statistical Data Analysis HW}
+\author{Ian Hunt-Isaak}
+\date{}
+\begin{document}
+\maketitle
+\section{}
+\subsection{Moments of Uniform Distribution based on Definition}
+
+With the uniform distribution:
+\begin{equation}
+	p_U(x) = \begin{cases}
+	\frac{1}{b-a} & a \leq x \leq b\\
+	0 & Otherwise
+	\end{cases}
+\end{equation}
+The $0^{th}$ moment:
+\begin{align}
+M_0 = \int_{-\infty}^{\infty} x^0 p_U(x)dx = \int_{a}^{b} \frac{dx}{b-a} = 1.
+\end{align}
+The $1^{st}$ moment:
+\begin{equation}
+M_1 = \int_{a}^{b} \frac{x dx}{b-a} = \frac{1}{2}\frac{b^2-a^2}{b-a} = \frac{1}{2}(a+b) = \mu,
+\end{equation}
+where $\mu$ is the mean of the distribution. For the higher moments it makes more sense to compute the moments about the mean of the distribution. So for the $2^{nd}$ moment about $\mu$:
+\begin{align}
+M_2 = \int_{a}^{b} \frac{(x-\mu)^2 dx}{b-a} = \frac{1}{3}\frac{1}{b-a}((b-\mu)^3-(a-\mu)^3) \nonumber \\
+= \frac{1}{3}\frac{1}{b-a}((\frac{b-a}{2})^3-(\frac{a-b}{2})^3) \\
+= \frac{1}{3}\left(\frac{b-a}{2}\right) \nonumber.
+\end{align}
+We can see that the 3rd moment will be zero as $(\frac{b-a}{2})^4-(\frac{a-b}{2})^4=0$,
+
+in general the odd moments will be zero. The kth moment will be:
+\begin{align}
+	M_k = \int_{a}^{b} \frac{(x^k-\mu)^2 dx}{b-a} = \frac{1}{k+1}\frac{1}{b-a}\left((b-\mu)^{k+1}-(a-\mu)^{k+1})\right) \nonumber\\
+	= \frac{1}{k+1}\frac{1}{b-a} \left(\left(\frac{b-a}{2}\right)^{k+1}\left(1-(-1)^{k+1}\right)\right) \\
+M_k	= \begin{cases}
+	0 & \text{k odd}\\
+	\frac{1}{k+1}\left(\frac{b-a}{2}\right)^k \nonumber & \text{k even}
+	\end{cases}
+\end{align}
+\subsection{Moments From the Characteristic function}
+\begin{align}
+\Phi = \int_{-\infty}^{\infty}e^{-i k x}p_U(x)dx = \int_{a}^{b}\frac{1}{b-a}e^{-i k x}dx \nonumber\\
+=\left.\frac{i}{k(b-a)}e^{-i k x} \right\vert_a^b\\
+= \frac{i}{k(b-a)}\left[e^{-i kb}-e^{-i ka}\right]
+\end{align}
+To make taking derivatives easier we re-write the exponentials as power series in k.
+
+\begin{align}
+\Phi = \frac{i}{k(b-a)} \left[ (1 - i kb +(-i)^2 \frac{k^2b^2}{2!}+ \dots)-\left(1 - i ka +(-i)^2 \frac{k^2a^2}{2!}+ \dots\right)\right] \nonumber\\
+= \frac{1}{b-a}\left[(b-a)+(-i) k(b^2-a^2)\frac{1}{2!} + \dots \frac{(-i k)^n}{(n+1)!}(b^{n+1}-a^{n+1})\right]\\
+%= \frac{1}{b-a}\left[(b-a)+(-i) k(b-a)\frac{1}{2!} + \dots \frac{(-i k)^n}{(n+1)!}(b-a)^{n+1}\right]
+\end{align}
+Transforming to be around the mean: ($a\to a-\mu =\frac{a-b}{2}$, $b\to b-\mu =\frac{b-a}{2}$), and taking the nth derivative w.r.t $k$ at $k=0$ then gives us the nth moment:
+\begin{align}
+(-i)^nM_n = \left.\frac{d^n \Phi}{dk^n}\right\vert_{k=0} = (-i)^n \frac{1}{(n+1)(b-a)}\left[\left(\frac{b-a}{2}\right)^{n+1}- (-1)^{n+1}\left(\frac{b-a}{2}\right)^{n+1}\right] \nonumber\\
+M_n = \begin{cases}
+0 & \text{n odd} \nonumber\\
+\frac{1}{n+1}\left(\frac{b-a}{2}\right)^{n} & \text{n even}
+\end{cases}\\
+\end{align}
+The same result as directly from the definition!.
+\end{document}
