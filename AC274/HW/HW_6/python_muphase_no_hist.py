@@ -24,7 +24,7 @@ cssq = 2.0 / 9.00
 #plotting functions:
 def flip_T(a):
     return np.flipud(a.T)
-def calc_macro_f(f,lx,ly):
+def calc_macro_f(f,lx=128,ly=128):
     #Assumes f at a given time step
     #  this fxn shouldn't be used in the loops as it takes times to create new numpy arrays
     # useful after running for getting macro quantities w/o having the rho,u, and v arrays handy
@@ -92,7 +92,7 @@ def fast(rho, Nsteps,G, lx,ly):
         fout = np.copy(f[0])
         for kk in range(0,9):
             f[1,kk,:,:] = np.roll(fout[kk,:,:],(ex[kk],ey[kk]),(0,1))
-;
+
         u[:,:] = 0
         v[:,:] = 0
 
@@ -125,7 +125,7 @@ def init_rho(radius=20, lx=128, ly = 128):
     y,x = np.ogrid[-disp_x:lx-disp_x,-disp_y:ly-disp_y]
     mask = x*x +y*y < radius**2
     rho[mask] = 2.4
-    rho *= 1+.05*(np.random.rand(lx,ly)-.5)
+    rho *= 1+.01*(np.random.rand(lx,ly)-.5)*2
     rho[mask == 0] = .125
     return rho
 def determine_radius(rho, lx=128,ly=128):
@@ -134,12 +134,27 @@ def determine_radius(rho, lx=128,ly=128):
     target = (rho_cent+rho_out)/2
     idx = np.argmin(np.abs(rho[:,int(ly/2)] - target))
     return np.abs(lx/2-idx)
+def determine_radius2(rho):
+    lx = rho.shape[0]
+    ly = rho.shape[1]
+    m_tot = lx*ly*np.average(rho)
+    rho_min = np.min(rho)
+    m_drop = m_tot - lx*ly*rho_min
+    rho_drop = np.max(rho)
+    return np.sqrt(m_drop/(np.pi*rho_drop))
+    
 def pressure(rho,G):
     psi = rho_psi*(1-np.exp(-rho/rho_psi))
     press = (rho*cs2+.5*G*cs2*psi**2)
     pmax = np.max(press)
     pmin = np.min(press)
     return pmin, pmax
+def pressure2(rho,G,lx=128,ly=128):
+    psi = rho_psi*(1-np.exp(-rho/rho_psi))
+    press = (rho*cs2+.5*G*cs2*psi**2)
+    pmid = press[int(lx/2),int(ly/2)]
+    pout = press[int(lx/16),int(ly/16)]
+    return pmid-pout
 def run(G = -5, radius_init = 20, Nsteps = 5000, save = True,
                                     savename=None, lx=128,ly=128):
     rho_init = init_rho(radius_init, lx,ly)
@@ -147,10 +162,12 @@ def run(G = -5, radius_init = 20, Nsteps = 5000, save = True,
 
     rho = calc_macro_f(out[1],lx,ly)[0]
     radius = determine_radius(rho,lx,ly)
+    radius2 = determine_radius2(rho)
     press = pressure(rho,G)
-
+    delta_P2 = pressure2(rho,G,lx,ly)
     print("G: {:}".format(G))
     print("Radius: {:}".format(radius))
+    print("Radius2: {:}".format(radius2))
     print("Delta P: {:}".format(press[1]-press[0]))
     print("Pmin: {:}".format(press[0]))
     print("Pmax: {:}".format(press[1]))
@@ -159,8 +176,8 @@ def run(G = -5, radius_init = 20, Nsteps = 5000, save = True,
         if savename is None:
             savename = "muphase_{:}_{:}_{:}".format(G,Nsteps,radius_init)
         np.save(savename,rho)
-    out_dict = {'G':G,'radius':radius,'pmin':press[0],'pmax':press[1],'f':out[1],
-                'deltaP':press[1]-press[0]}
+    out_dict = {'G':G,'radius':radius,'radius2':radius2,'pmin':press[0],'pmax':press[1],'f':out[1],
+                'deltaP':press[1]-press[0],'rho':rho,'deltaP2':delta_P2}
     return out_dict
 
 

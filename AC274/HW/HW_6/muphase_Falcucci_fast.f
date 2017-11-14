@@ -248,7 +248,7 @@ c---------------------------------------------------
       do j = 0,ny+1
        do i =0,nx+1
 
-        if(((i-nx/2)**2+(j-ny/2)**2).lt.400) then
+        if(((i-nx/2)**2+(j-ny/2)**2).lt.361) then
           rhod1(i,j)=2.410d0*(1.d0 + 0.01d0 * (rand(0) - 0.5d0) * 2.d0) !Con Mauro fino a 2.837 ma SENZA PERTURB!!!!!!
          else
           rhod1(i,j)=0.1250d0
@@ -1489,7 +1489,8 @@ c ============================
 c----------------------------------------------------------
 
         p=0.d0
-
+        pmin = 10000
+        pmax = 0
         do j = 1,ny
           do i = 1,nx
             pid  =rhod1(i,j)*cs2
@@ -1548,7 +1549,12 @@ c----------------------------------------------------------
 
               rhoaver = rhoaver/(nx*ny)
 
-         write(*,*) 'rhoaver vale', rhoaver
+         write(*,*) 'rhoaver: ', rhoaver
+         write(*,*) 'pmax: ', pmax
+         write(*,*) 'pmin: ', pmin
+         write(*,*) 'rhomax: ', rhomax
+         write(*,*) 'rhomin: ', rhomin
+         write(*,*) 'rhopsi: ', rhopsi
 
          write(*,*) '..calcolo del raggio della bolla in corso...'
 
