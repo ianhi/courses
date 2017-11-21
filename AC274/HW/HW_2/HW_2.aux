@@ -1,0 +1,60 @@
+\relax 
+\@writefile{toc}{\contentsline {section}{\numberline {1}Change Log: HW1 $\to $ HW2}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Introduction}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Problem 1 - HW 1}{1}}
+\newlabel{eq:AD_cont}{{1}{1}}
+\newlabel{eq:discrete_AD1}{{2}{1}}
+\newlabel{eq:discrete_AD2}{{3}{2}}
+\newlabel{eq:dx}{{4}{2}}
+\newlabel{eq:dx^2}{{5}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Dispersion Relation}{2}}
+\newlabel{eq:disp_1}{{7}{2}}
+\newlabel{eq:disp_2}{{8}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Stability}{3}}
+\newlabel{eq:this_one}{{12}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}HW 1 - 1D Diffusion}{3}}
+\citation{matrix_flops}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:sfig1}{{1a}{4}}
+\newlabel{sub@fig:sfig1}{{a}{4}}
+\newlabel{fig:sfig2}{{1b}{4}}
+\newlabel{sub@fig:sfig2}{{b}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces (a) The solution to the Advection-Diffusion equation with periodic boundary conditions after 650 time steps with $\delta = .2$, $\alpha = .5$, parameters that are stable, but not physically realizable. (b) Diagnostic plots confirming that the solution is stable, these values for the different diagnostics were normalized so as to fit on the same plot. Not that $M_1$ is not monotonically increasing as a consequence of the periodic boundary conditions, not a numerical error.\relax }}{4}}
+\newlabel{fig:fig}{{1}{4}}
+\newlabel{eq:T_Diffusion}{{14}{4}}
+\newlabel{eq:diffusion_prop}{{15}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Efficiency}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces (a)A plot of the results for a simulation of 1 dimensional diffusion with Dirichlet boundary conditions with the edges held at a value of 1. The initial conditions were a sharp Gaussian in the center of the simulation with a max value of one.. The legend refers to the time step at which each curve occurred. The curves are arranged later in time by increasing darkness. (b) Diagnostic plots confirming that the solution is slowly gaining mass and entropy over time. Note however, that the these values do not explode to infinity exponentially as we might expect for an unstable ($\gamma >0$) system. Rather they asymptote to values determined by the Dirichlet boundary conditions.\relax }}{5}}
+\newlabel{fig:1D_diffu_diri1}{{2}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}1-D Diffusion Diagnostics}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Mass}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces (a)A plot of the results for a simulation of 1 dimensional diffusion with Dirichlet boundary conditions with the edges held at a value of 1. The initial conditions were a sharp Gaussian in the center of the simulation with a max value of one . (b) Diagnostic plots confirming that the solution is slowly losing mass and entropy over time. Note however, that the these values do not oscillate into negative territory as we might expect for an unstable system. Rather they asymptote to values determined by the Dirichlet boundary conditions.\relax }}{6}}
+\newlabel{fig:1D_diffu_diri0}{{3}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}1-D Advection Diffusion}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}HW 1 - 2D Diffusion with Dirichlet BC}{6}}
+\newlabel{sec:HW1_2D}{{5}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A plot of the results for a simulation of 1 dimensional diffusion with Dirichlet boundary conditions. The initial conditions were a sharp Gaussian in the centered at .7, with a max value of one, and the two edge points were held to values of 1. In this simulation the space "fills up" from the left as a consequence of the "wind" of Advection. The wind pushes the initial Gaussian into the right wall where it is absorbed and prevents the right side boundary condition from contributing strongly to the rest of the simulated points. As in other plots the legend refers to the time step and darker values indicate a later time step. \relax }}{7}}
+\newlabel{fig:1D_AD}{{4}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces (a) Initial condition for a simulation of the diffusion equation in 2 dimensions with the boundaries held to a Dirichlet condition at a value of 0. (b) Some time later the system has evolved and the average value is being pulled to zero by the boundary conditions. (c) A diagnostic plot confirms that the solution is slowly losing mass and entropy over time.\relax }}{8}}
+\newlabel{fig:2D}{{5}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}HW 2 - 1D Advection Diffusion Reaction }{9}}
+\newlabel{eq:ADR_cont}{{18}{9}}
+\newlabel{eq:linear_chem}{{19}{9}}
+\newlabel{eq:chem_logis}{{20}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Computing}{9}}
+\newlabel{eq:T_Diffusion_2}{{21}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces (a) A plot of the results for a simulation of 1 dimensional ADR with periodic boundary conditions. The initial condition was a sharp Gaussian in the center of the simulation with a max value of one. (b) Diagnostic plots confirming that the solution is slowly gaining mass and entropy over time. The entropy shows an interesting feature, where at first it decreases, likely due to strong diffusivity, and then grows as there is more mass added to the system due to chemistry. The number of time steps was kept limited here in order to showcase the details at low t, however, if the simulation is extended for a long time the mass asymptotes to the value expected from the logistic chemistry, giving us confidence in the accuracy of our simulation. The diagnostic plots have been normalized so that their maximum value is one.\relax }}{10}}
+\newlabel{fig:1D_ADR}{{6}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces (a) A plot of the results for a simulation of 1 dimensional chemistry only equation (R) with periodic boundary conditions. The initial condition was a sharp Gaussian in the center of the simulation with a max value of one. Over time the solution appraoches the limiting value we would predict based on the (b) Diagnostic plots confirming that the solution is gaining mass and entropy over time. The Entropy per unit mass H/M0 fairly quickly approaches its maximum value. The diagnostic plots have been normalized so that their maximum value is one.\relax }}{11}}
+\newlabel{fig:1D_crank_nic}{{7}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Crank- Nicolson}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Commutability of Chemistry and AD Operators}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces A plot of the relative error when propagating and ADR equation in time with different operator error. The values on the Y axis are the average over the simulation grid of the percent difference between the operator orderings. As we expect chemistry and AD to commute well they are correspondingly small. \relax }}{12}}
+\newlabel{fig:commute_error}{{8}{12}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}HW2 - Adaptive Time Stepping for $\mathaccentV {dot}05F{x}=x^2$}{13}}
+\newlabel{eq:ODE_thing}{{27}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Summary}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces A plot comparing the analytic solution to Eq. 27\hbox {} to our adaptive method with various values of $\epsilon $. $\epsilon = 0.001$ is on the plot, however, at these scales it is indistinguishable from the analytic solution. For $\epsilon = \{0.1, 0.01, 0.001\}$ the solutions took 17, 178, and 1787 time steps to complete. \relax }}{14}}
+\newlabel{fig:adaptive}{{9}{14}}
+\bibcite{matrix_flops}{1}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Acknowledgements}{15}}

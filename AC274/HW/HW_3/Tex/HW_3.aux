@@ -1,0 +1,22 @@
+\relax 
+\citation{shasta}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\newlabel{eq:continuity}{{1}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Numerical Methods}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Upwind}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Lax-Wendroff}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Flux Corrected Transport (FCT)}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}FCT + Antidiffusion}{2}}
+\citation{shasta}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}SHASTA}{3}}
+\newlabel{eq:def_fc_right}{{5}{3}}
+\newlabel{eq:def_fc_left}{{6}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{3}}
+\bibcite{shasta}{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Comparison of the different approaches to numerically solving Eq. 1\hbox {}. In this comparison we can see that the center of mass is propagated at the same velocity regardless of the time marching method or corrective diffusion steps used. For an easier comparison of profile shapes consider Figure 2\hbox {}. \relax }}{5}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:constU_f_compare}{{1}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Comparison of the different approaches to numerically solving Eq. 1\hbox {} after 600 time steps with an initial wave form of a square wave. In this comparison the waveforms have been offset in X from each other so as to compare their shape. Overall the results of this comparison are as expected, with both the Upwind and FCT methods showing strong dispersion, Lax-Wendroff ad FCT + Antidiffusion maintaining the basic square wave shape, but with wiggles, and finally the SHASTA method developed by Boris and Book providing the most accurate results. A comparison of the level diffusion in each method can be seen in Figure 3\hbox {}. \relax }}{6}}
+\newlabel{fig:constU_f_compare_offset}{{2}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Comparison of the quantity $H_2$, which serves as a measure of the localization (or entropy) of the solution. In this case we can use this as a proxy measure for the amount of numerical diffusion introduced by our solution method, with lower values of $H_2$ corresponding to greater amounts of diffusion. The results here agree with visual inspection of Figure 2\hbox {}, though they provide a more quantitative sense of the differences of diffusion in the methods. While the SHASTA method is unquestionably the most accurate we can see here that while avoiding wiggles, it does less well than Lax-Wendroff or FCT+Antidiffusion at preventing numerical diffusion.\relax }}{7}}
+\newlabel{fig:constU_compareH}{{3}{7}}

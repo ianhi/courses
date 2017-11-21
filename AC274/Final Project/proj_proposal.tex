@@ -1,0 +1,45 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[backend=bibtex,style=numeric-comp,
+			sorting=none, url=false]{biblatex}
+			
+\addbibresource{Beer.bib} 
+\title{AC274 Project Proposal}
+\author{Ian Hunt-Isaak}
+\begin{document}
+	\maketitle
+	
+
+	\section{Motivating Question}
+	A common behavior at parties is to tap the top of beer can prior to opening. This is purported to prevent the overflow of foam from a previously shaken can upon opening. On first inspection this appears foolish as the tapping is simply adding additional energy. Energy that is negligible at best, or contributes to the eruption of foam at worst. This strategy is plausibly effective if the tapping, in particular on the sides of a can, was to release the $\mathrm{CO}_2$ bubbles that form on small nucleation sites on the insides of the can. From Bramforth \cite{bamforth_relative_2004} we know that the size of nucleation sites is of critical importance to the foam developed by a beer, lending possible credence to this theory.
+
+	\section{Physics}
+	Studying beer may appear silly but there are multiple studies such as \cite{lee_bubble_2011,mantic-lugo_beer_2015,benilov_why_2013} with interesting results arising from  similar questions. 
+	Others have likely found interest in the study of bubbles/foams in beer as they present an interesting multiphysics problem. Beer foam formation is impacted by many factors, including the protein content of the beer. At its simplest level the problem has four important sources of rich physics
+	\begin{enumerate}
+		\item The beer begins as a supersaturated solution of $\mathrm{CO}_2$, potentially necessitating some sort of source term in a computational approach.
+		\item The problem is inherently multiphase involving a liquid, bubbles in that liquid, the external environment, and a foam. 
+		\item The interactions with the internal surface of the can are important and require thoughtful modeling.
+		\item This is a non-equilibrium process as there is a sudden switch in system configuration when the can is opened.
+	\end{enumerate}
+	
+	\section{Motivation of Simulation}
+	My original question of whether or not tapping on a can prior to opening has an impact on foam over is most easily answered by experiment. However, there are advantages to simulation, such as the consistency and high spatial and temporal resolution, things that may be unavailable to me experimentally. Simulation would also provide precise control of the internal state of the beverage, knowledge of which is not immediately accessible via experiment. Finally, I think that this would provide a challenging computational problem that will leave me with a strong understanding of both the theory, and practicalities of use of the LBM. 
+%	\begin{enumerate}
+%		\item The direct problem may be best approached by expt
+%			\subitem Simulation provides consistency and a highly spatially and temporally resolved view of what is happening that might be difficult in expt
+%			\subitem Precise control of the internal state of the beverage, knowdlege of which is not immediately accessible via experiment. Clear soda bottles might help, but difficult on visual inspection to see small nucleation sites.
+%			\subitem Most important however, this is a computational physics course, and as explained this is a rich physics problem that provides a good opportunity to learn about simulation of multiphysics fluids and foams.
+%			\subitem I've been wanting to actually do these experiments and it would be nice to combine the experiments with some computation and theory. 
+%		\item LBM good for multiphysics/phase fluid problems
+%			\subitem some citations		
+%	\end{enumerate}
+	\section{Implementation}
+	I'd like to use the LBM to approach this problem computationally. Given your history with LBM this is seems like the best time for me explore the LBM, and it seems to be that is a decent tool for this problem. As discussed in class the LBM is good for multiphysics problems and multiphase fluids, and, people have already used the LBM for problems with similarities to this one. Namely, liquids in which supersatured interactions are important \cite{kang_lattice_2004}, problems with important surface interactions \cite{martys_simulation_1996} \cite{attar_lattice_2009}, and foams \cite{barzegari_multiphase_2017,beugre_lattice_2010}. I will either use, or build off, an existing open source LBM simulation code such as LB3D \cite{schmieschek_lb3d:_2017} or the code developed by Bryan Weinstein \cite{weinstein_2d-lb:_2016}.
+
+	\printbibliography
+\end{document}
