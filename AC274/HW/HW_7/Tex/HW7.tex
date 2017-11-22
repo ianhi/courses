@@ -73,4 +73,61 @@ M_n = \begin{cases}
 \end{cases}\\
 \end{align}
 The same result as directly from the definition!.
+
+\section{10m Tall Humans}
+I calculate the probability of a 10 m tall human if height were Lorentz distributed as follows:
+
+\begin{align}
+y = \frac{10000-a}{L} = \frac{10000-180}{20}\\
+p(10000) = \frac{1}{\pi L}\frac{1}{(1+y)^2} = \frac{1}{\pi 20}\frac{1}{(1+820)^2} \approx 6.6\cdot 10^{-8},
+\end{align}
+or about 7 in a Billion. In contrast if we take Human height to be normally distributed with $\mu=180$ cm and $\sigma=20$, we would find a probability of $~10^{-52532}$, which is effectively zero.
+
+\section{Langevin Equation}
+The Langevin Equation (eq \ref{eq:lange}) can be used to describe stochastic processes such as the Motion of a large particle through a sea of smaller particles. 
+\begin{align}
+\dot{x} = V \nonumber\\
+\dot{V} = -\partial_x U -\gamma V(t) + \xi(t)
+\label{eq:lange}
+\end{align}
+This is possible because it takes into account the force from an external potential, a drag term, and a random shock term. The temperature of system can be considered in this system by scaling the random term, $\xi(t)$ by a quantity $V_{\text{thermal}}$. I used the following potential for my simulations of the Langevin equation:
+
+\begin{equation}
+	U = -\left[\frac{\sin ((x-2)\pi)}{(x-2)\pi}+\frac{\sin ((x-5)\pi)}{(x-5)\pi}\right].
+	\label{eq:potential}
+\end{equation}
+The potential $U$ and its derivative are both plotted in Figure \ref{fig:potential}. Sampling a linear spacing of initial positions I propagated the simulation particles forward in time for several thousand time steps and recorded and binned their x positions and velocities. The results of this for the Langevin equation with linear damping can be seen in Figure \ref{fig:lange_linear}, and for nonlinear damping in \ref{fig:lange_nonlinear}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/lange_potential.png}
+	
+	\caption{The potential, and it's derivative, that was used for the Langevin equation simulation. This form was chosen as it gives a double well potential while being easily differentiable. }
+	\label{fig:potential}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/lange_double_well.png}
+	
+	\caption{Results of my Langevin equation simulation for a double well with potential as defined in Eq. \ref{eq:potential}. As expected we see greater probability density in the regions of the simulation corresponding to the minima of the potential. The blue histogram has been normalized so that the probability density it represents sums to one. }
+	\label{fig:lange_linear}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/lange_double_well_nonlinear.png}
+	
+	\caption{Results of my Langevin equation simulation for a double well with potential as defined in Eq. \ref{eq:potential} with a nonlinear damping term $-\gamma V^3$. Compared to the linear damping term the distribution of probability around the wells of the potential is more diffuse. This makes sense as the temperature is the same so similar sized jumps occur, but the particles take longer to relax back to the minimum of the potential. }
+	\label{fig:lange_nonlinear}
+	\end{figure}
+	
+\section{Laplace Test Revisited}
+I had originally misunderstood the Laplace test and was trying to vary the radius by varying the value of G. This does affect the final radius as it changes the nature of the force, however this is not how the test should be performed. The corrected plot of the Laplace showing the expected linear behavior is below in Figure \ref{fig:laplace} 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/Laplace_test_multG.png}
+	
+	\caption{Laplace test results from my multiphase Lattice Boltzmann code. This shows the expected linear behavior. The x axis is $\frac{1}{R}$}
+	\label{fig:laplace}
+\end{figure}
 \end{document}
