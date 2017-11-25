@@ -20,3 +20,4 @@ AC274/HW/HW_6/figures/*
 *.cb
 *.cb2
 */render_prep
+*.pyc
