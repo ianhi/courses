@@ -10,6 +10,7 @@ import numpy as np
 from vispy.util.transforms import ortho
 from vispy import gloo
 from vispy import app
+from vispy import io
 import matplotlib.pyplot as plt
 
 
@@ -69,9 +70,14 @@ void main()
 
 class Canvas(app.Canvas):
 
-    def __init__(self,sim,scaling_factor=1.0, max_magnitude=1.0,force_method=None):
+    def __init__(self,sim,scaling_factor=1.0, max_magnitude=1.0,force_method=None,
+                steps_per_draw = 1, render_folder = "./",save_images = False):
         self.sim = sim
+        self.steps_per_draw = steps_per_draw
+        self.render_folder = render_folder
         self.W, self.H = sim.lx, sim.ly
+        self.total_steps = 0
+        self.save_images = save_images
         if force_method is None:
             self.force_method = self.sim.force_shan_chen
         else:
@@ -142,10 +148,16 @@ class Canvas(app.Canvas):
 
     def on_draw(self, event):
         gloo.clear(color=True, depth=True)
-        self.sim.step(1,force_method=self.force_method)
+        self.sim.step(self.steps_per_draw,force_method=self.force_method)
+        # print(np.sum(self.sim.rho))
         self.texture.set_data(self.sim.rho.astype(np.float32))
         self.program.draw('triangle_strip')
-        self.update()
+        # self.update()
+        if self.save_images:
+            self.total_steps +=1
+            screenshot = gloo.util._screenshot()
+            io.write_png(self.render_folder +
+                    str(self.total_steps).zfill(6) + '.png', screenshot)
 
 
 if __name__ == '__main__':
