@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -72,8 +73,9 @@ def add_circ_to_mask(mask,x,y,cent_x,cent_y,radius):
 def mask_to_rho(mask, lx, ly):
     rho= np.zeros([lx,ly])
     rho[mask !=0] = 2.4
-    rho *= 1+.01*(np.random.rand(lx,ly)-.5)*2
     rho[mask==0] = .125
+    rho *= 1+.01*(np.random.rand(lx,ly)-.5)*2
+
     return rho
 class LBM():
     def __init__(self, G = -5, lx=128, ly=128, omega = 1,G1 = None, G2=0,
@@ -103,13 +105,19 @@ class LBM():
             self.rho=rho
         elif init_type.lower() == 'rand':
             self.rho = 1+.05*((np.random.rand(self.lx,self.ly)-.5)*2)
-        elif init_type == 'mult_circ':
+        elif init_type.lower() == 'mult_circ':
             y,x = np.ogrid[0:self.lx,0:self.ly]
             mask = np.zeros([self.lx,self.ly])
             mask = add_circ_to_mask(mask,x,y,25,100,40)
             mask = add_circ_to_mask(mask,x,y,82,52,26)
             mask = add_circ_to_mask(mask,x,y,25,20,30)
             self.rho = mask_to_rho(mask, self.lx, self.ly)
+        elif init_type.lower()=='rb':
+            #rayleigh bernard?
+            xx, yy = np.meshgrid(np.zeros(self.lx),np.arange(self.ly))
+            # self.rho=(xx+yy)/128
+            self.rho = np.log((xx+yy)+1)/np.log(128+1)
+            self.rho *= 1+.05*((np.random.rand(self.lx,self.ly)-.5)*2)
         else:
             Print("No input. Random initial rho")
             self.rho = 1+.05*((np.random.rand(self.lx,self.ly)-.5)*2)
@@ -161,12 +169,9 @@ class LBM():
         w4 =1/60/3
         w5 =2/315/3
         w8 =1/5040/3
-
         w0=1-(4*w1+4*w2+4*w4+8*w5+4*w8)
-
         force_x = -self.G1*(f_x/9+f2_x/36)-self.G2*(f_x*w1+f2_x*w2)
         force_y = -self.G1*(f_y/9+f2_y/36)-self.G2*(f_y*w1+f2_y*w2)
-
 
         # Second belt of forces
         # Here assume that psi for G1 is same as for G2. Everyone makes this
@@ -176,23 +181,25 @@ class LBM():
         f3_x = 2*psi*(np.roll(psi,(-2,0),(0,1))-np.roll(psi,(2,0),(0,1)))
         f3_y = 2*psi*(np.roll(psi,(0,-2),(0,1))-np.roll(psi,(0,2),(0,1)))
 
-        #2nd belt corners
+        # 2nd belt corners
         f4_x = 2*psi*(np.roll(psi,(-2,2),(0,1))+np.roll(psi,(-2,-2),(0,1))
                     -np.roll(psi,(2,2),(0,1))-np.roll(psi,(2,-2),(0,1)))
         f4_y = 2*psi*(np.roll(psi,(-2,-2),(0,1))+np.roll(psi,(2,-2),(0,1))
                     -np.roll(psi,(2,2),(0,1))-np.roll(psi,(-2,2),(0,1)))
+
+        #TODO fix f5's. They give a weird diagonal thing
         # 2nd belt remaining points
         f5_x = 2*psi*(np.roll(psi,(-2,1),(0,1))+np.roll(psi,(-2,-1),(0,1))
                     -np.roll(psi,(2,1),(0,1))-np.roll(psi,(2,-1),(0,1))
                     +np.roll(psi,(-1,2),(0,1))+np.roll(psi,(-1,-2),(0,1))
-                    -np.roll(psi,(2,-1),(0,1))-np.roll(psi,(1,-2),(0,1)))
-        # I don't want to type that out carefully again, so just swap the axis
-        # argument, which is the same as s
+                    -np.roll(psi,(1,2),(0,1))-np.roll(psi,(1,-2),(0,1)))
+        # # I don't want to type that out carefully again, so just swap the axis
+        # # argument, which is the same as s
         f5_y = 2*psi*(np.roll(psi,(-2,1),(1,0))+np.roll(psi,(-2,-1),(1,0))
                     -np.roll(psi,(2,1),(1,0))-np.roll(psi,(2,-1),(1,0))
                     +np.roll(psi,(-1,2),(1,0))+np.roll(psi,(-1,-2),(1,0))
-                    -np.roll(psi,(2,-1),(1,0))-np.roll(psi,(1,-2),(1,0)))
-
+                    -np.roll(psi,(1,2),(1,0))-np.roll(psi,(1,-2),(1,0)))
+        # print(-self.G2*(f3_x*w4+f4_x*w8+f5_x*w5))
         force_x += -self.G2*(f3_x*w4+f4_x*w8+f5_x*w5)
         force_y += -self.G2*(f3_y*w4+f4_y*w8+f5_y*w5)
         return force_x, force_y

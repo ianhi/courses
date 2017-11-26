@@ -71,7 +71,8 @@ void main()
 class Canvas(app.Canvas):
 
     def __init__(self,sim,scaling_factor=1.0, max_magnitude=1.0,force_method=None,
-                steps_per_draw = 1, render_folder = "./",save_images = False):
+                steps_per_draw = 1, render_folder = "./",
+                save_images = False,max_steps = 2147483647):
         self.sim = sim
         self.steps_per_draw = steps_per_draw
         self.render_folder = render_folder
@@ -82,6 +83,8 @@ class Canvas(app.Canvas):
             self.force_method = self.sim.force_shan_chen
         else:
             self.force_method = force_method
+        self.max_steps = max_steps
+
         app.Canvas.__init__(self, keys='interactive', size=((self.W * 5), (self.H * 5)))
         self.scaling_factor = scaling_factor
         self.max_magnitude = max_magnitude
@@ -154,10 +157,14 @@ class Canvas(app.Canvas):
         self.program.draw('triangle_strip')
         # self.update()
         if self.save_images:
-            self.total_steps +=1
-            screenshot = gloo.util._screenshot()
-            io.write_png(self.render_folder +
-                    str(self.total_steps).zfill(6) + '.png', screenshot)
+            if self.total_steps < self.max_steps:
+                self.total_steps += 1
+                screenshot = gloo.util._screenshot()
+                io.write_png(self.render_folder +
+                        str(self.total_steps).zfill(6) + '.png', screenshot)
+            else:
+                print("DONE SAVING :)")
+                self.save_images = False
 
 
 if __name__ == '__main__':
