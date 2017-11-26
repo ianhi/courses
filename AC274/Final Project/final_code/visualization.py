@@ -53,14 +53,14 @@ void main()
     i_value *= scale_factor;
 
     // Calculate the position of i in the colormap
-    if (i_value < -max_magnitude){
+    if (i_value <= 0 ){
         gl_FragColor = texture1D(colormap_array, 0.000001);
     }
-    else if (i_value > max_magnitude){
+    else if (i_value >= max_magnitude){
         gl_FragColor = texture1D(colormap_array, 0.9999999);
     }
     else {
-        float color_value = (i_value + max_magnitude)/(2*max_magnitude);
+        float color_value = i_value;//(i_value + max_magnitude)/(2*max_magnitude);
         gl_FragColor = texture1D(colormap_array, color_value);
     }
 }
@@ -153,14 +153,14 @@ class Canvas(app.Canvas):
         gloo.clear(color=True, depth=True)
         self.sim.step(self.steps_per_draw,force_method=self.force_method)
         # print(np.sum(self.sim.rho))
-        self.texture.set_data(self.sim.rho.astype(np.float32))
+        self.texture.set_data(((self.sim.rho-np.min(self.sim.rho))/np.max(self.sim.rho-np.min(self.sim.rho))).astype(np.float32))
         self.program.draw('triangle_strip')
         # self.update()
         if self.save_images:
             if self.total_steps < self.max_steps:
                 self.total_steps += 1
                 screenshot = gloo.util._screenshot()
-                io.write_png(self.render_folder +
+                io.write_png(self.render_folder + self.force_method.__name__+
                         str(self.total_steps).zfill(6) + '.png', screenshot)
             else:
                 print("DONE SAVING :)")
