@@ -21,3 +21,4 @@ AC274/HW/HW_6/figures/*
 *.cb2
 */render_prep
 *.pyc
+*.ipynb_checkpoints
