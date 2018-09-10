@@ -22,3 +22,4 @@ AC274/HW/HW_6/figures/*
 */render_prep
 *.pyc
 *.ipynb_checkpoints
+Phys251/HW/HW_1/outputs/*.png
